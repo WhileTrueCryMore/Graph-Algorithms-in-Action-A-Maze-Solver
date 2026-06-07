@@ -11,9 +11,9 @@ class Solution {
         ans = mid;
 
         if (first)
-          r = mid - 1;  // keep looking left
+          r = mid - 1; 
         else
-          l = mid + 1;  // keep looking right
+          l = mid + 1;
       } else if (nums[mid] < target) {
         l = mid + 1;
       } else {
