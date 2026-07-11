@@ -11,17 +11,19 @@
  */
 class Solution {
  public:
-  bool hasPathSum(TreeNode* root, int targetSum) {
-    return isSum(root, targetSum);
+  bool isSymmetric(TreeNode* root) {
+    return mirror(root->left, root->right);
   }
-  bool isSum(TreeNode* root, int target) {
-    if (!root) {
-      return false;
-    }
-    if (!root->left && !root->right && root->val == target) {
+  bool mirror(TreeNode* a, TreeNode* b) {
+    if (!a && !b) {
       return true;
     }
-
-    return (isSum(root->left, target - root->val) || isSum(root->right, target - root->val));
+    if (!a || !b) {
+      return false;
+    }
+    if (a->val != b->val) {
+      return false;
+    }
+    return mirror(a->left, b->right) && mirror(a->right, b->left);
   }
 };

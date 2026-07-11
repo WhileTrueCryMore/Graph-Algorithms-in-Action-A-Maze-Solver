@@ -11,17 +11,25 @@
  */
 class Solution {
  public:
-  bool hasPathSum(TreeNode* root, int targetSum) {
-    return isSum(root, targetSum);
+  bool is = 0;
+  bool isBalanced(TreeNode* root) {
+    depth(root);
+    return (!is);
   }
-  bool isSum(TreeNode* root, int target) {
-    if (!root) {
-      return false;
-    }
-    if (!root->left && !root->right && root->val == target) {
-      return true;
-    }
 
-    return (isSum(root->left, target - root->val) || isSum(root->right, target - root->val));
+  int depth(TreeNode* root) {
+    if (is) return 0;
+    if (!root) {
+      return 0;
+    }
+    int ll = depth(root->left);
+    if (is) return 0;
+    int rl = depth(root->right);
+    if (is) return 0;
+    if (abs(ll - rl) > 1) {
+      is = 1;
+      return 0;
+    }
+    return 1 + max(ll, rl);
   }
 };

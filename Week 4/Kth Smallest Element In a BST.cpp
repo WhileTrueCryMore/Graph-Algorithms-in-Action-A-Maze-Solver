@@ -10,18 +10,23 @@
  * };
  */
 class Solution {
- public:
-  bool hasPathSum(TreeNode* root, int targetSum) {
-    return isSum(root, targetSum);
+ private:
+  int curr = 0;
+  int val = 0;
+  void inorder(TreeNode* root, int target) {
+    if (!root || target <= curr) return;
+    inorder(root->left, target);
+    if (++curr == target) {
+      val = root->val;
+      return;
+    }
+    inorder(root->right, target);
+    return;
   }
-  bool isSum(TreeNode* root, int target) {
-    if (!root) {
-      return false;
-    }
-    if (!root->left && !root->right && root->val == target) {
-      return true;
-    }
 
-    return (isSum(root->left, target - root->val) || isSum(root->right, target - root->val));
+ public:
+  int kthSmallest(TreeNode* root, int k) {
+    inorder(root, k);
+    return val;
   }
 };
