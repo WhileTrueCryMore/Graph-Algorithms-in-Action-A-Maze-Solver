@@ -104,8 +104,6 @@ Result dijkstra(const Grid& g, pair<int, int> s, pair<int, int> t) {
   int total = g.R * g.C;
   vector<int> dist(total, INT_MAX);
   vector<int> parent(total, -1);
-  vector<bool> visited(total, false);
-
   int startIndex = s.first * g.C + s.second;
   int endIndex = t.first * g.C + t.second;
 
@@ -115,13 +113,13 @@ Result dijkstra(const Grid& g, pair<int, int> s, pair<int, int> t) {
 
   int expanded = 0;
   while (!pq.empty()) {
+    int d = pq.top().first;
     int u = pq.top().second;
     pq.pop();
 
-    if (visited[u]) {
+    if (d != dist[u]) {
       continue;
     }
-    visited[u] = true;
     expanded++;
 
     if (u == endIndex) {
@@ -135,7 +133,7 @@ Result dijkstra(const Grid& g, pair<int, int> s, pair<int, int> t) {
       int nc = nb.second;
       int v = nr * g.C + nc;
       int stepCost = cellCost(g.cells[nr][nc]);
-      if (!visited[v] && dist[u] + stepCost < dist[v]) {
+      if (dist[u] + stepCost < dist[v]) {
         dist[v] = dist[u] + stepCost;
         parent[v] = u;
         pq.push({dist[v], v});
@@ -158,13 +156,9 @@ Result astar(const Grid& g, pair<int, int> s, pair<int, int> t) {
   int total = g.R * g.C;
   vector<int> dist(total, INT_MAX);
   vector<int> parent(total, -1);
-  vector<bool> visited(total, false);
-
   int startIndex = s.first * g.C + s.second;
   int endIndex = t.first * g.C + t.second;
 
-  // Queue entries are {guessTotal, {costSoFar, index}} so the default
-  // pair ordering (via greater<>) sorts by guessTotal first, same as before.
   priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>,
                  greater<pair<int, pair<int, int>>>>
       pq;
@@ -177,13 +171,9 @@ Result astar(const Grid& g, pair<int, int> s, pair<int, int> t) {
     int u = pq.top().second.second;
     pq.pop();
 
-    if (visited[u]) {
-      continue;
-    }
     if (costSoFar != dist[u]) {
       continue;
     }
-    visited[u] = true;
     expanded++;
 
     if (u == endIndex) {
@@ -197,7 +187,7 @@ Result astar(const Grid& g, pair<int, int> s, pair<int, int> t) {
       int nc = nb.second;
       int v = nr * g.C + nc;
       int stepCost = cellCost(g.cells[nr][nc]);
-      if (!visited[v] && dist[u] + stepCost < dist[v]) {
+      if (dist[u] + stepCost < dist[v]) {
         dist[v] = dist[u] + stepCost;
         parent[v] = u;
         pq.push({dist[v] + manhattan(nr, nc, t.first, t.second), {dist[v], v}});
